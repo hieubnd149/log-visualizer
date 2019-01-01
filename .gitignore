@@ -1,0 +1,4 @@
+.vscode/*
+upload/*
+venv/*
+access_log_20190101.csv
