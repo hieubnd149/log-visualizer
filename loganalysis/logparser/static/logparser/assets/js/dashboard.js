@@ -9,6 +9,15 @@
     initHourTrafficChart();
     initTrafficByUrlChart();
 
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
     function convertHex (hex, opacity) {
         hex = hex.replace('#', '')
         const r = parseInt(hex.substring(0, 2), 16)
@@ -65,7 +74,7 @@
                     }],
                     yAxes: [ {
                         ticks: {
-                            beginAtZero: true,
+                            // beginAtZero: true,
                             maxTicksLimit: timeSeriesLabels.length,
                             max: Math.max(...timeSeriesData) + (100 - Math.max(...timeSeriesData) % 100)
                         },
@@ -87,67 +96,77 @@
     }
 
     function initTrafficByUrlChart() {
-        console.log(djangoUrlTrafficAnalyzedData)
-        // if (!djangoUrlTrafficAnalyzedData) {
-        //     return;
-        // }
+        if (!djangoUrlTrafficAnalyzedData) {
+            return;
+        }
 
-        // let timeSeriesLabels = [];
-        // let timeSeriesData = [];
-        // for (let key in djangoUrlTrafficAnalyzedData) {
-        //     timeSeriesLabels.push(key);
-        //     timeSeriesData.push(djangoUrlTrafficAnalyzedData[key].count);
-        // }
+        let chartData = djangoUrlTrafficAnalyzedData.data;
+        
+        // achieve all labels first
+        let setLabels = new Set();
+        for (let index in chartData) {
+            setLabels.add(chartData[index].date_time);
+        }
 
-        // let ctx = document.getElementById( "urlTrafficChart" );
-        // let myChart = new Chart( ctx, {
-        //     type: 'line',
-        //     data: {
-        //         labels: timeSeriesLabels,
-        //         datasets: [{
-        //             label: 'Request(count)',
-        //             backgroundColor: convertHex(brandInfo, 10),
-        //             borderColor: brandInfo,
-        //             pointHoverBackgroundColor: '#fff',
-        //             borderWidth: 2,
-        //             data: timeSeriesData
-        //         }]
-        //     },
-        //     options: {
-        //         maintainAspectRatio: true,
-        //         legend: {
-        //             display: false
-        //         },
-        //         responsive: true,
-        //         scales: {
-        //             xAxes: [{
-        //                 gridLines: {
-        //                     display: true
-        //                 },
-        //                 ticks: {
-        //                     autoSkip: false
-        //                 }
-        //             }],
-        //             yAxes: [ {
-        //                 ticks: {
-        //                     beginAtZero: true,
-        //                     maxTicksLimit: timeSeriesLabels.length,
-        //                     max: Math.max(...timeSeriesData) + (100 - Math.max(...timeSeriesData) % 100)
-        //                 },
-        //                 gridLines: {
-        //                     display: true
-        //                 }
-        //             } ]
-        //         },
-        //         elements: {
-        //             point: {
-        //                 radius: 0,
-        //                 hitRadius: 10,
-        //                 hoverRadius: 4,
-        //                 hoverBorderWidth: 3
-        //             }
-        //         }
-        //     }
-        // } );
+        let timeSeriesLabels = [...setLabels];
+        let defaultData = {};
+        for (let i in timeSeriesLabels) {
+            defaultData[timeSeriesLabels[i]] = 0;
+        }
+
+        let dict = {};
+        for (let index in chartData) {
+            if (!dict[chartData[index].url]) {
+                dict[chartData[index].url] = Object.assign({}, defaultData);
+            } 
+            dict[chartData[index].url][chartData[index].date_time] = chartData[index].count;
+        }
+
+        let datasets = [];
+        for (let key in dict) {
+            let dts = Object.keys(dict[key]).map(i => dict[key][i]);
+            let randColor = getRandomColor()
+            datasets.push({
+                label: key,
+                borderColor: randColor,
+                backgroundColor: randColor,
+                pointHoverBackgroundColor: '#fff',
+                fill: false,
+                borderWidth: 2,
+                data: dts
+            });
+        }
+
+        let ctx = document.getElementById( "urlTrafficChart" );
+        let myChart = new Chart( ctx, {
+            type: 'line',
+            data: {
+                labels: [...timeSeriesLabels],
+                datasets: datasets
+            },
+            options: {
+                maintainAspectRatio: true,
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: true
+                        },
+                        ticks: {
+                            autoSkip: false
+                        }
+                    }],
+                    yAxes: [ {
+                        ticks: {
+                            maxTicksLimit: timeSeriesLabels.length,
+                            // max: Math.max(...timeSeriesData) + (100 - Math.max(...timeSeriesData) % 100)
+                        },
+                        gridLines: {
+                            display: true
+                        }
+                    } ]
+                }
+            }
+        } );
     }
 } )( jQuery );

@@ -3,7 +3,7 @@ import os
 
 
 def readlog():
-    path = os.path.join(os.getcwd(), '../upload/access_logs/access_log_20190101.csv')
+    path = os.path.join(os.getcwd(), '../upload/access_logs/access_log_20190102.csv')
     indexes = ['ip', 'None_1', 'None_2', 'date_time', 'time_zone', 'url', 'response_code', 'response_time', 'none_3', 'none_4']
     
     # read access log
@@ -14,7 +14,7 @@ def readlog():
 
 # mode: h - hour, m - minute, s - second
 # date time pattern: [dd/MM/YYYY:HH24:MI:SS
-def extractTimeData(dateTimes, mode='m'):
+def extractTimeFromString(string, mode='m'):
     toIndex = 20 #default for s
     postFix = ''
 
@@ -24,8 +24,11 @@ def extractTimeData(dateTimes, mode='m'):
     elif mode == 'h':
         toIndex = 14
         postFix = ':00:00'
-    
-    times = [(elem[1:toIndex] + postFix, 1) for elem in dateTimes]
+    return string[1:toIndex] + postFix
+
+
+def extractTimeData(dateTimes, mode='m'):
+    times = [(extractTimeFromString(elem, mode), 1) for elem in dateTimes]
     return times
 
 
@@ -38,9 +41,10 @@ def analyzeTimeHourTraffic(csvlog):
     return result
 
 
+# pattern: "POST /cinox/ws/CommonRestService/getUserApiData5 HTTP/1.1"
 def extractUrlSeriesData(urls):
-    # pattern: "POST /cinox/ws/CommonRestService/getUserApiData5 HTTP/1.1"
     urlSeries = []
+    
     for fullUrl in urls:
         arr = fullUrl.split(" ")
         urlSeries.append((arr[0], arr[1], 1))
@@ -48,10 +52,11 @@ def extractUrlSeriesData(urls):
 
 
 def analyzeURLTraffic(csvlog):
-    urls = csvlog['url']
-    urlSeries = extractUrlSeriesData(urls=urls)
+    urls = csvlog[['url', 'date_time']]
 
-    dataFrame = pd.DataFrame(data=urlSeries, columns=['method', 'url', 'count'])
-    result = dataFrame.groupby(['url', 'method']).sum()
+    df = pd.DataFrame(urls['url'].str.split(' ').tolist(), columns=['method', 'url', 'http'])
+    df['date_time'] = [extractTimeFromString(elem, mode='h') for elem in urls['date_time']]
+
+    result = df.groupby(['url', 'date_time']).size().reset_index(name="count")
     return result
 
