@@ -40,11 +40,11 @@
         let timeSeriesData = [];
         for (let key in djangoHourTrafficAnalyzedData) {
             timeSeriesLabels.push(key);
-            timeSeriesData.push(djangoHourTrafficAnalyzedData[key].count);
+            timeSeriesData.push(djangoHourTrafficAnalyzedData[key]);
         }
 
-        let ctx = document.getElementById( "hourTrafficChart" );
-        let myChart = new Chart( ctx, {
+        let ctx = document.getElementById( "hourTrafficChart" ).getContext('2d');
+        let myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: timeSeriesLabels,
@@ -65,6 +65,9 @@
                 responsive: true,
                 scales: {
                     xAxes: [{
+                        scaleLabel: {
+                            display: true
+                        },
                         gridLines: {
                             display: true
                         },
@@ -101,6 +104,7 @@
         }
 
         let chartData = djangoUrlTrafficAnalyzedData.data;
+        let maxValue = 0;
         
         // achieve all labels first
         let setLabels = new Set();
@@ -120,6 +124,10 @@
                 dict[chartData[index].url] = Object.assign({}, defaultData);
             } 
             dict[chartData[index].url][chartData[index].date_time] = chartData[index].count;
+
+            if (maxValue < chartData[index].count) {
+                maxValue = chartData[index].count;
+            }
         }
 
         let datasets = [];
@@ -131,6 +139,9 @@
                 borderColor: randColor,
                 backgroundColor: randColor,
                 pointHoverBackgroundColor: '#fff',
+                pointStyle: 'rectRot',
+                pointRadius: 5,
+                pointBorderColor: 'rgb(0, 0, 0)',
                 fill: false,
                 borderWidth: 2,
                 data: dts
@@ -147,6 +158,11 @@
             options: {
                 maintainAspectRatio: true,
                 responsive: true,
+                legend: {
+                    labels: {
+                        usePointStyle: true
+                    }
+                },
                 scales: {
                     xAxes: [{
                         gridLines: {
@@ -159,12 +175,20 @@
                     yAxes: [ {
                         ticks: {
                             maxTicksLimit: timeSeriesLabels.length,
-                            // max: Math.max(...timeSeriesData) + (100 - Math.max(...timeSeriesData) % 100)
+                            max: maxValue
                         },
                         gridLines: {
                             display: true
                         }
                     } ]
+                },
+                elements: {
+                    point: {
+                        radius: 0,
+                        hitRadius: 10,
+                        hoverRadius: 4,
+                        hoverBorderWidth: 3
+                    }
                 }
             }
         } );

@@ -2,3 +2,6 @@
 upload/*
 venv/*
 access_log_20190101.csv
+
+# ignore all compiled code
+*.pyc
