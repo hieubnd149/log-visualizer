@@ -1,0 +1,9 @@
+# web framework
+django
+djangorestframework
+
+# data manipulation
+pandas
+
+# for postgres
+psycopg2

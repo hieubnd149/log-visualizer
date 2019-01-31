@@ -1,8 +1,12 @@
 from rest_framework import serializers
-from .models import Question
+from .models import Songs
 
-class QuestionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Question
-        fields = ('id', 'question_text', 'pub_date')
-        read_only_fields = (['pub_date'])
+
+class SongsSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Songs
+        fields = ('title', 'artist')
+
+
+class TokenSerializer(serializers.Serializer):
+    token = serializers.CharField(max_length=255)
