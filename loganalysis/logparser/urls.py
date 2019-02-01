@@ -3,12 +3,13 @@ from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
+from .auth.views import LoginView
 from .accesslog import views as accesslog_views
 
 app_name = 'logparser'
 urlpatterns = [
     # path('', views.index, name='index'),
-    url('auth/login', views.LoginView.as_view(), name='auth-login'),
+    url('auth/login', LoginView.as_view(), name='auth-login'),
 
     url('admin', views.adminPage, name='admin-page'),
     url('accesslog/view', accesslog_views.processAccessLog, name='accesslog-view'),

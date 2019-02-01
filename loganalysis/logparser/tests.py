@@ -56,7 +56,7 @@ class BaseViewTest(APITestCase):
 class SongTest(BaseViewTest):
     """Test get all songs API"""
 
-    def test_get_all_song(self):
+    def a_test_get_all_song(self):
         self.login_client('test_user', 'testing')
 
         response = self.client.get(
@@ -84,7 +84,7 @@ class AuthLoginUserTest(BaseViewTest):
         )
 
 
-    def a_test_login_user_with_valid_creditials(self):
+    def test_login_user_with_valid_creditials(self):
         response = self.login_a_user('test_user', 'testing')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
