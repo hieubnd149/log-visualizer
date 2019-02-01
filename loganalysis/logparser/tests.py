@@ -92,3 +92,23 @@ class AuthLoginUserTest(BaseViewTest):
 
         response = self.login_a_user('anonymous', 'anypass')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    
+class AuthSignupUserTest(BaseViewTest):
+    """Test signup a user"""
+    def signup_a_user(self, username, password, email):
+        url = reverse('logparser:auth-signup')
+        return self.client.post(
+            url,
+            data=json.dumps({
+                'username': username,
+                'password': password,
+                'email': email
+            }),
+            content_type='application/json'
+        )
+
+
+    def test_signup_a_user(self):
+        response = self.signup_a_user('user', 'pass1', 'test@email.com')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
