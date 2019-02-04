@@ -18,6 +18,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Application definition
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '&o$=glu2=be4lddcuk@j&o-2-oc852w)x=tk8s2fdrx(nz(n7+'
+
+
 INSTALLED_APPS = [
     'logparser.apps.LogParserConfig',
     'django.contrib.admin',
@@ -155,4 +162,6 @@ JWT_AUTH = {
 
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_AUTH_COOKIE': None,
+    
+    'JWT_SECRET_KEY': SECRET_KEY,
 }

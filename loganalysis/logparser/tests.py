@@ -109,6 +109,22 @@ class AuthSignupUserTest(BaseViewTest):
         )
 
 
+    def login_a_user(self, username="", password=""):
+        url = reverse('logparser:auth-login')
+        return self.client.post(
+            url,
+            data=json.dumps({
+                'username': username,
+                'password': password
+            }),
+            content_type='application/json'
+        )
+
+
     def test_signup_a_user(self):
         response = self.signup_a_user('user', 'pass1', 'test@email.com')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.login_a_user('user', 'pass1')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('token', response.data)

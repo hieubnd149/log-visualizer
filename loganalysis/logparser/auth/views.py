@@ -15,13 +15,10 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 @api_view(['POST'])
 @permission_classes((permissions.AllowAny,))
 def signup(request):
-    print('POSSSSSSST', request.data)
-    
-    user = User.objects.create_user(username=request.data.username, email=request.data.email, password=request.data.password)
-
-    if form.is_valid():
-        form.save()
-        return Response(status=status.HTTP_200)
+    user = User.objects.create_user(username=request.data['username'], email=request.data['email'], password=request.data['password'])
+    if user is not None: 
+        user.save()
+        return Response(status=status.HTTP_200_OK)
     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
