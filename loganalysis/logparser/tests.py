@@ -7,7 +7,7 @@ from rest_framework.views import status
 from .models import Songs
 from .serializers import SongsSerializer
 
-from django.contrib.auth.models import User
+from .auth.component.models import User
 
 
 class BaseViewTest(APITestCase):
@@ -39,12 +39,10 @@ class BaseViewTest(APITestCase):
 
 
     def setUp(self):
-        self.user = User.objects.create_superuser(
+        self.user = User.objects.create_user(
             username="test_user",
             email="test@mail.com",
-            password="testing",
-            first_name="test",
-            last_name="user",
+            password="testing"
         )
 
         self.create_song("like glue", "sean paul")
@@ -56,11 +54,11 @@ class BaseViewTest(APITestCase):
 class SongTest(BaseViewTest):
     """Test get all songs API"""
 
-    def a_test_get_all_song(self):
+    def test_get_all_song(self):
         self.login_client('test_user', 'testing')
 
         response = self.client.get(
-            reverse('logparser:song-all')
+            reverse('logparser:song-all-test')
         )
 
         expected = Songs.objects.all()
@@ -122,9 +120,9 @@ class AuthSignupUserTest(BaseViewTest):
 
 
     def test_signup_a_user(self):
-        response = self.signup_a_user('user', 'pass1', 'test@email.com')
+        response = self.signup_a_user('user1', 'pass1', 'test@email.com')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.login_a_user('user', 'pass1')
+        response = self.login_a_user('user1', 'pass1')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', response.data)

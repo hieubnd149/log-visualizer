@@ -1,14 +1,104 @@
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+<!doctype html>
+<html class="no-js" lang="en">
 
-{% if latest_question_list %}
-    <ul>
-        {% for question in latest_question_list %}
-            <li>
-                <a href="{% url 'polls:detail' question.id %}">{{question.question_text}}</a>
-            </li>  
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available</p>
-{% endif %}
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Sufee Admin - HTML5 Admin Template</title>
+    <meta name="description" content="Sufee Admin - HTML5 Admin Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="{% static 'logparser/vendors/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'logparser/vendors/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'logparser/vendors/themify-icons/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'logparser/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'logparser/vendors/selectFX/css/cs-skin-elastic.css' %}">
+    <link rel="stylesheet" href="{% static 'logparser/vendors/jqvmap/dist/jqvmap.min.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'logparser/assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'logparser/assets/css/custom-style.css' %}">
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+    <!-- Right Panel -->
+
+    <div id="right-panel" class="right-panel">
+
+        <!-- Header-->
+        <header id="header" class="header">
+
+            <div class="header-menu">
+                <div class="col-sm-7">
+                    <h2>Log Analysis Application</h2>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="user-area dropdown float-right">
+                        <a class="nav-link" href="auth/logout"><i class="fa fa-power-off"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+
+        </header><!-- /header -->
+        <!-- Header-->
+
+        <div>
+            <div class="breadcrumbs">
+                <div class="col-sm-4">
+                    <div class="page-header float-left">
+                        <div class="page-title">
+                            <h1>Dashboard</h1>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="col-sm-8">
+                    <div class="page-header float-right">
+                        <div class="page-title">
+                            <ol class="breadcrumb text-right">
+                                <button type="button" class="btn btn-primary" onclick="location.href='/logparser/accesslog/view'"><i class="fa fa-gear"></i>&nbsp; Process</button>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+
+            <div class="content mt-3">
+                <div class="col-lg-3 col-md-6 dashboard">
+                    <div class="social-box facebook">
+                        <i class="fa fa-calendar"></i>
+                        {% comment %} <i class="fa fa-sign-in"></i> {% endcomment %}
+                        {% comment %} <i class="fa fa-facebook"></i> {% endcomment %}
+                        <div class="content">
+                            <span>Access Log</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /#right-panel -->
+
+    <script src="{% static 'logparser/vendors/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'logparser/vendors/popper.js/dist/umd/popper.min.js' %}"></script>
+    <script src="{% static 'logparser/vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'logparser/assets/js/main.js' %}"></script>
+
+
+    <script src="{% static 'logparser/vendors/chart.js/dist/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'logparser/vendors/jqvmap/dist/jquery.vmap.min.js' %}"></script>
+    <script src="{% static 'logparser/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+
+</body>
+
+</html>

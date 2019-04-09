@@ -23,10 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '&o$=glu2=be4lddcuk@j&o-2-oc852w)x=tk8s2fdrx(nz(n7+'
-
+DEBUG = True
 
 INSTALLED_APPS = [
-    'logparser.apps.LogParserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -34,6 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'logparser',
+    'logparser.auth.component',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +48,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'loganalysis.urls'
+
 
 TEMPLATES = [
     {
@@ -81,6 +83,9 @@ DATABASES = {
     },
 }
 
+
+# APP Setting
+AUTH_USER_MODEL = 'component.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

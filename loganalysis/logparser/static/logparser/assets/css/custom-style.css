@@ -1,0 +1,19 @@
+li a {
+    color: green;
+}
+
+.alert-red-message {
+    color: #ff2e44;
+}
+
+.dashboard .content {
+    display: inline-block;
+    margin: 7px 0 0;
+    padding: 10px;
+    width: 100%;
+}
+.dashboard .content > span {
+    font-weight: 500;
+    color: #949ca0;
+    text-transform: uppercase;
+}
